@@ -1,0 +1,100 @@
+#include <sys/time.h>
+#include <sys/resource.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <unistd.h>
+#include "check.h"
+
+int x[5] = {1,2,3,4,5};
+
+void allocate()
+{
+    int i;
+    int *p;
+    for(i =1 ; i<1000000 ; i++)
+    {
+      p = malloc(500 * sizeof(int));
+      if(func(i)) { free (p);}
+    }
+}
+
+void allocate1()
+{
+  int i;
+  int *p;
+  for (i=1 ; i<10000 ; i++)
+  {
+    p = malloc(1000 * sizeof(int));
+    if(i & 1)
+      free (p);
+  }
+}
+
+void allocate2()
+{
+  int i;
+  int *p;
+  for (i=1 ; i<300000 ; i++)
+  {
+    p = malloc(10000 * sizeof(int));
+    free (p);
+  }
+}
+
+
+int main(int argc, char const *argv[]) {
+  int i;
+  int *p;
+  struct rusage usage, usage2, usage3, usage4, usage5, usage6;
+  struct timeval start, end, start2, end2;
+  long start3, end3, start4, end4, start5, end5, start6, end6;
+  printf("Executing the code ......\n");
+  getrusage(RUSAGE_SELF, &usage); 
+  getrusage(RUSAGE_SELF, &usage2); 
+  start = usage.ru_utime; 
+  start2 = usage.ru_stime;
+  getrusage(RUSAGE_SELF, &usage3);
+  start3 = usage.ru_maxrss;
+  getrusage(RUSAGE_SELF, &usage3);
+  start4 = usage.ru_nsignals;
+  getrusage(RUSAGE_SELF, &usage3);
+  start5 = usage.ru_nvcsw;
+  getrusage(RUSAGE_SELF, &usage3);
+  start6 = usage.ru_nivcsw;
+  allocate();
+
+  for (i=0 ; i<10000 ; i++)
+  {
+    p = malloc(1000 * sizeof(int));
+    free (p);
+  }
+
+  getrusage(RUSAGE_SELF, &usage);
+  end = usage.ru_utime;
+  getrusage(RUSAGE_SELF, &usage2);
+  end2 = usage2.ru_stime;
+  getrusage(RUSAGE_SELF, &usage3);
+  end3 = usage3.ru_maxrss;
+  getrusage(RUSAGE_SELF, &usage4);
+  end4 = usage4.ru_nsignals;
+  getrusage(RUSAGE_SELF, &usage5);
+  end5 = usage5.ru_nvcsw;
+  getrusage(RUSAGE_SELF, &usage6);
+  end6 = usage6.ru_nivcsw;
+
+  printf("User cpu time: Started at: %ld.%lds\n", start.tv_sec, start.tv_usec);
+  printf("User cpu time: Ended at: %ld.%lds\n", end.tv_sec, end.tv_usec);
+  printf("System cpu time: Started at: %ld.%lds\n", start2.tv_sec, start2.tv_usec);
+  printf("System cpu time: Ended at: %ld.%lds\n", end2.tv_sec, end2.tv_usec);
+  printf("Max resident size: Started at: %ld\n", start3);
+  printf("Max resident size: Ended at: %ld\n", end3);
+  printf("Signals: Started at: %ld\n", start4);
+  printf("Signals: Ended at: %ld\n", end4);
+  printf("Voluntary context switches: Started at: %ld\n", start5);
+  printf("Voluntary context switches: Ended at: %ld\n", end5);
+  printf("Involuntary context switches: Started at: %ld\n", start6);
+  printf("Involuntary context switches: Ended at: %ld\n", end6);
+  printf("Program execution successfull\n");
+  return 0;
+}
+
