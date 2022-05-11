@@ -9,7 +9,6 @@
 #include <stdint.h>
 #include <stdlib.h>
 
-//Used textbook for logic and help from TA's
 int misses = 0, hits = 0, diskint = 0, pagefaults = 0;
 int clock;
 int totalaccess = 0;
