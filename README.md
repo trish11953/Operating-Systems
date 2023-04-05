@@ -9,8 +9,11 @@ Operating systems are a crucial component of computer systems, responsible for m
 Here's a list of some topics covered in this repository:
 
 Process Scheduling Simulator: Implementing a process scheduling simulator that supports various scheduling algorithms, such as FCFS, SJF, and Round Robin.
+
 Page Table and TLB Implementation: Implementing a simulation of a three-level page table and a translation lookaside buffer (TLB) to handle virtual-to-physical address translation and demonstrate the benefits of hierarchical paging and TLB caching.
+
 Simple Map-Reduce WordCount Application: Creating a simple map-reduce application that processes a large text dataset and counts the occurrences of each word, demonstrating the use of parallel processing and inter-process communication for efficient data analysis.
+
 Dynamic Storage Allocator: Designing and implementing a dynamic storage allocator that supports memory allocation and deallocation requests. Writing functions like malloc, free, realloc, heapchecker, etc from scratch.
 
 ## Dependencies
